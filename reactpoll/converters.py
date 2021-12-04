@@ -21,7 +21,7 @@ TIME_RE_STRING = r"|".join(
     ]
 )
 TIME_RE = re.compile(TIME_RE_STRING, re.I)
-QUESTION_RE = re.compile(r"([^;]+)(?<=\?)\s?", re.I)
+QUESTION_RE = re.compile(r"([^;]+)(?<=\?|\؟)\s?", re.I)
 OPTIONS_RE = re.compile(r"([\S\s]+)(?=;)[\S\s]+", re.I)
 SPLIT_RE = re.compile(r";")
 TIME_SPLIT = re.compile(r"t(?:ime)?=")
