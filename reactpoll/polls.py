@@ -89,13 +89,13 @@ class Poll:
                             await old_msg.remove_reaction(e, member)
                         except Exception:
                             pass
-                    if member:
-                        try:
-                            await member.send(
-                                f"You've already voted on `{self.question}`, changing vote to {emoji}."
-                            )
-                        except discord.errors.Forbidden:
-                            pass
+                    # if member:
+                    #     try:
+                    #         await member.send(
+                    #             f"You've already voted on `{self.question}`, changing vote to {emoji}."
+                    #         )
+                    #     except discord.errors.Forbidden:
+                    #         pass
             if user_id not in self.tally[emoji]:
                 self.tally[emoji].append(user_id)
 
