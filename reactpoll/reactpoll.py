@@ -260,16 +260,16 @@ class ReactPoll(commands.Cog):
                 interactive = False
                 continue
             if count == 0:
-                if not msg.content.endswith("?"):
-                    await ctx.send("That doesn't look like a question, try again.")
-                    continue
-                else:
-                    poll_options["question"] = msg.content
-                    await ctx.send(
-                        "Enter the options for the poll. Enter an emoji at the beginning of the message if you want to use custom emojis for the option counters."
-                    )
-                    count += 1
-                    continue
+                # if not msg.content.endswith("?"):
+                #     await ctx.send("That doesn't look like a question, try again.")
+                #     continue
+                # else:
+                poll_options["question"] = msg.content
+                await ctx.send(
+                    "Enter the options for the poll. Enter an emoji at the beginning of the message if you want to use custom emojis for the option counters."
+                )
+                count += 1
+                continue
             custom_emoji = EMOJI_RE.match(msg.content)
             time_match = TIME_RE.match(msg.content)
             multi_match = MULTI_RE.match(msg.content)
