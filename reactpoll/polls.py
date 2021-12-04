@@ -72,11 +72,11 @@ class Poll:
                     await old_msg.remove_reaction(emoji, member)
                 except Exception:
                     pass
-            if member:
-                try:
-                    await member.send("Don't clutter the poll.")
-                except discord.errors.Forbidden:
-                    pass
+            # if member:
+            #     try:
+            #         await member.send("Don't clutter the poll.")
+            #     except discord.errors.Forbidden:
+            #         pass
             return
         if not self.multiple_votes:
             for e in self.tally:
@@ -145,7 +145,7 @@ class Poll:
     async def build_poll(self):
         # Starting codepoint for keycap number emoji (\u0030... == 0)
         base_emoji = ReactionPredicate.NUMBER_EMOJIS + ReactionPredicate.ALPHABET_EMOJIS
-        msg = "**POLL STARTED!**\n\n{}\n\n".format(self.question)
+        msg = "**رای گیری شروع شد!**\n\n{}\n\n".format(self.question)
         option_num = 1
         option_msg = ""
         if not self.interactive:
@@ -160,12 +160,12 @@ class Poll:
         if not self.tally:
             self.tally = {e: [] for e in self.emojis}
         msg += option_msg
-        msg += "\nSelect the number to vote!"
+        msg += "\nشماره مورد نظر را جهت رای گیری انتخواب کنید!"
         if self.duration:
-            msg += f"\nPoll closes in {humanize_timedelta(timedelta=self.duration)}"
+            msg += f"\nپایان رای گیری تا {humanize_timedelta(timedelta=self.duration)} دیگر..."
 
         em = discord.Embed(colour=await self.get_colour(self.channel))
-        em.title = "POLL STARTED!"
+        em.title = "رای گیری شروع شد!"
         first = True
         for page in pagify(f"{self.question}\n\n{option_msg}", page_length=1024):
             if first:
@@ -175,9 +175,9 @@ class Poll:
                 em.add_field(name="Options continued", value=page)
         end = ""
         if self.duration:
-            end = "| ends at"
+            end = "| زمان پایان"
         em.set_footer(
-            text=f"{self.author} created a poll {end}", icon_url=str(self.author.avatar_url),
+            text=f"توسط {self.author} {end}", icon_url=str(self.author.avatar_url),
         )
         if self.end_time:
             em.timestamp = self.end_time
@@ -196,7 +196,7 @@ class Poll:
 
     async def close_poll(self):
 
-        msg = "**POLL ENDED!**\n\n"
+        msg = "**رای گیری پایان یافت!**\n\n"
         try:
             old_msg = await self.get_message()
 
@@ -217,19 +217,19 @@ class Poll:
             log.error("error tallying results", exc_info=True)
 
         em = discord.Embed(colour=await self.get_colour(self.channel))
-        em.title = "**POLL ENDED**"
+        em.title = "**رای گیری پایان یافت**"
         # This is handled with fuck-all efficiency, but it works for now -Ruined1
         if sum(len(v) for k, v in self.tally.items()) == 0:
-            msg += "***NO ONE VOTED.***\n"
+            msg += "***عدم وجود آراء.***\n"
             try:
                 if self.embed:
                     await self.channel.send(msg)
                 else:
-                    em.description = f"{self.question}\n\n***NO ONE VOTED.***\n"
+                    em.description = f"{self.question}\n\n***عدم وجود آراء.***\n"
                     await self.channel.send(embed=em)
             except (discord.errors.Forbidden, discord.errors.NotFound, AttributeError):
                 pass
-        votes_msg = f"{self.question}\n\n**Results**\n"
+        votes_msg = f"{self.question}\n\n**نتایج**\n"
         for e, vote in sorted(self.tally.items(), key=lambda x: len(x[1]), reverse=True):
             votes_msg += f"{self.emojis[e]}: {len(vote)}\n"
         msg += votes_msg
@@ -239,7 +239,7 @@ class Poll:
                 em.description = page
                 first = False
             else:
-                em.add_field(name="Results continued", value=page)
+                em.add_field(name="ادامه نتایج", value=page)
         try:
             if not self.embed:
                 for page in pagify(msg):
